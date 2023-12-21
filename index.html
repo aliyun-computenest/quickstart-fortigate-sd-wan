@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="计算巢是阿里云开放给企业应用服务商的服务管理平台。服务商能够在计算巢上发布私有化部署服务，为其客户提供云上软件一键部署的能力；同时也支持全托管模式的服务，赋能服务商托管其客户资源。">
+  <title>计算巢一键部署SD-WAN - Aliyun 计算巢 x fortigate-sd-wan</title>
+
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
+  <link rel="stylesheet" href="css/theme.css">
+  
+
+  
+
+  
+  
+
+  
+    <script src="search/main.js"></script>
+  
+
+  
+
+  <script src="js/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="nav">
+      <div class="nav-inner">
+        <div class="logo">
+          <img src="./img/logo-2x.png">
+        </div>
+        <div class="nav-list">
+          <ul>
+          
+              <li><a href="#sd-wan">计算巢一键部署SD-WAN</a></li>
+              
+          
+              <li><a href="#1">1 概述</a></li>
+              
+          
+              <li><a href="#2">2 方案拓扑</a></li>
+              
+          
+              <li><a href="#3">3 前提条件</a></li>
+              
+                  <li><a href="#31-cen">3.1 创建CEN</a></li>
+                  
+              
+                  <li><a href="#32-tr">3.2 创建TR</a></li>
+                  
+              
+          
+              <li><a href="#4-sd-wan">4 一键部署SD-WAN</a></li>
+              
+                  <li><a href="#41">4.1 云市场查找计算巢部署界面</a></li>
+                  
+              
+                  <li><a href="#42">4.2 从计算巢界面找部署界面</a></li>
+                  
+              
+                  <li><a href="#43-token">4.3 购买Token形式的授权文件</a></li>
+                  
+              
+                  <li><a href="#44-sd-wan">4.4 部署SD-WAN</a></li>
+                  
+              
+                  <li><a href="#45">4.5 验证配置</a></li>
+                  
+                      <li class="li-h3"><a href="#451-sd-wan">4.5.1 SD-WAN设备配置验证</a></li>
+                  
+                      <li class="li-h3"><a href="#452">4.5.2 云上配置验证</a></li>
+                  
+              
+          
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="content theme-github">
+      
+      <div class="content-inner">        
+        
+        <h1 id="sd-wan">计算巢一键部署SD-WAN</h1>
+<h1 id="1">1 概述</h1>
+<ul>
+<li>
+<p>目前阿里云VPN产品已经实现了BGP动态路由、VPN-attachment接入TR等功能。
+  BGP动态路由功能是在IPsec-VPN连接的基础上增加的子功能，它集成CEN动态路由收发能力，可以帮助用户更高效、灵活且可靠的建立IPsec-VPN连接，实现云上和云下网络的互通。详情参阅<a href="https://help.aliyun.com/document_detail/170235.html">文档</a>。</p>
+</li>
+<li>
+<p>VPN-attachment可以从TR侧学习云上路由，也可以将从云下学习到的路由或用户配置在VPN-attachment上的路由同步给TR；详情参阅<a href="https://ata.alibaba-inc.com/articles/243091?spm=a1z2e.12184483.learn.darticletitle1.e2664f9bm4Z5io">文档</a>。</p>
+</li>
+<li>
+<p>BGP动态路由、VPN-attachment接入TR各有优势，可以考虑将这两个功能结合起来实现上述客户的需求。本文档将结合BGP动态路由以及VPN-attachment接入TR这两个功能，通过计算巢一键部署VPN attachment for SDWAN的场景。</p>
+</li>
+</ul>
+<h1 id="2">2 方案拓扑</h1>
+<p><img alt="" src="1.png" /></p>
+<h1 id="3">3 前提条件</h1>
+<ol>
+<li>必须要创建云企业网（CEN）;</li>
+<li>必须要创建转发路由器（TR）;</li>
+<li>必须要有一个创建Region（根据场景不同，创建多区域Region）;</li>
+</ol>
+<h2 id="31-cen">3.1 创建CEN</h2>
+<p><img alt="" src="2.png" />
+<img alt="" src="3.png" />
+<img alt="" src="4.png" />
+<img alt="" src="5.png" /></p>
+<p>点击确认，完成CEN的创建</p>
+<p><img alt="" src="6.png" /></p>
+<h2 id="32-tr">3.2 创建TR</h2>
+<p><img alt="" src="7.png" /></p>
+<p>点击云企业网进入创建TR</p>
+<p><img alt="" src="8.png" />
+<img alt="" src="9.png" />
+<img alt="" src="10.png" /></p>
+<p>点击确认，北京区域的TR创建完成</p>
+<p><img alt="" src="11.png" />
+<img alt="" src="12.png" /></p>
+<p>杭州区域的TR创建完成</p>
+<p><img alt="" src="13.png" /></p>
+<p>2个区域的TR创建完成</p>
+<h1 id="4-sd-wan">4 一键部署SD-WAN</h1>
+<h2 id="41">4.1 云市场查找计算巢部署界面</h2>
+<p><img alt="" src="14.png" /></p>
+<p>在搜索框中输入：Fortinet SD-WAN查找计算巢服务</p>
+<p><img alt="" src="15.png" />
+<img alt="" src="16.png" />
+<img alt="" src="17.png" /></p>
+<h2 id="42">4.2 从计算巢界面找部署界面</h2>
+<p><img alt="" src="18.png" /></p>
+<ol>
+<li>Fortinet SD WAN是通过Token形式激活SD-WAN服务</li>
+<li>Fortinet SD WAN-File是通过激活文件的形式激活SD-WAN服务</li>
+</ol>
+<h2 id="43-token">4.3 购买Token形式的授权文件</h2>
+<p><img alt="" src="14.png" /></p>
+<p>在搜索框中输入：License Fortinet查找购买授权文件</p>
+<p><img alt="" src="20.png" />
+<img alt="" src="21.png" /></p>
+<p>可以根据购买时间购买，选好服务版本后立即购买</p>
+<p><img alt="" src="22.png" />
+<img alt="" src="23.png" /></p>
+<p>在已购服务中找到购买的License，点击详情</p>
+<p><img alt="" src="24.png" /></p>
+<p>然后复制后续部署使用</p>
+<h2 id="44-sd-wan">4.4 部署SD-WAN</h2>
+<p><img alt="" src="26.png" />
+<img alt="" src="27.png" /></p>
+<ol>
+<li>付费类型根据需求选择 </li>
+<li>北京区域里面可用区根据实际需求选择 </li>
+<li>地址段设计（根据实际需求规划地址段）</li>
+</ol>
+<p><img alt="" src="28.png" /></p>
+<p>选择创建的云企业网以及计算巢放置在所需要的TR中（此处放在北京TR中）</p>
+<p><img alt="" src="29.png" />
+<img alt="" src="30.png" /></p>
+<p>实例类型规格选择，目前以上是所有的规格型号，此部署以2vCPU 4GiB的规格部署</p>
+<p><img alt="" src="31.png" /></p>
+<p>根据Token的授权方式激活计算巢服务</p>
+<p><img alt="" src="32.png" /></p>
+<p>其他配置一样，就是激活方式不一样，以上是以授权文件形式激活。</p>
+<p><img alt="" src="33.png" />
+<img alt="" src="34.png" /></p>
+<p>立即支付部署SD-WAN</p>
+<p><img alt="" src="35.png" /></p>
+<p>进入计算巢查看部署进度</p>
+<p><img alt="" src="36.png" /></p>
+<p>查看进度，大概3-5分钟部署完成</p>
+<p><img alt="" src="37.png" /></p>
+<p>部署完成，等1分钟可以通过Endpoint web登录，然后进入工作台查看ECS</p>
+<p><img alt="" src="38.png" />
+<img alt="" src="39.png" />
+<img alt="" src="40.png" /></p>
+<p>初始登录用户名是admin 密码是ECS的实例ID号</p>
+<p><img alt="" src="42.png" /></p>
+<p>登录进设备首先需要修改密码，旧密码是实例ID号，然后新密码设置</p>
+<p><img alt="" src="43.png" /></p>
+<p>登录进SD-WAN设备</p>
+<h2 id="45">4.5 验证配置</h2>
+<h3 id="451-sd-wan">4.5.1 SD-WAN设备配置验证</h3>
+<p><img alt="" src="43.png" /></p>
+<p>跟云内已经自动对接完成</p>
+<p><img alt="" src="44.png" /></p>
+<p>策略已经自动配置完成</p>
+<p><img alt="" src="45.png" />
+<img alt="" src="46.png" />
+<img alt="" src="47.png" /></p>
+<p>BGP已经自动对接完成，已经学习到云上的路由</p>
+<h3 id="452">4.5.2 云上配置验证</h3>
+<p><img alt="" src="48.png" /></p>
+<p>实例自动创建完成</p>
+<p><img alt="" src="49.png" /></p>
+<p>VPC自动创建完成</p>
+<p><img alt="" src="50.png" /></p>
+<p>VSwitch自动创建完成</p>
+<p><img alt="" src="51.png" />
+<img alt="" src="52.png" /></p>
+<p>云上VPN以及BGP自动创建完成</p>
+<p><img alt="" src="53.png" /></p>
+<p>北京区域可以自动学习SD-WAN的路由 </p>
+        
+      </div>
+
+      <div class="copyrights">© 2009-2022 Aliyun.com 版权所有</div>
+    </div>
+  </div>
+  
+  <!--
+  MkDocs version      : 1.5.3
+  Docs Build Date UTC : 2023-12-21 08:49:48.531311+00:00
+  -->
+</body>
+</html>
